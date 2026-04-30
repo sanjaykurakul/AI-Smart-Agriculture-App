@@ -77,7 +77,7 @@ class CropModel:
     def get_profit(self, crop):
         return self.profit_data.get(crop, 0)
 
-def chatbot_response(self, user_query):
+    def chatbot_response(self, user_query):
     query = user_query.lower()
 
     if "best crop" in query:
