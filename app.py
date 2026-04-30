@@ -2,7 +2,11 @@ import streamlit as st
 import pandas as pd
 from crop_recommendation import CropModel
 
-st.title("Crop Recommendation System")
+# simple page config
+st.set_page_config(page_title="Crop Predictor", layout="centered")
+
+st.title("🌾 Crop Recommendation System")
+st.write("Fill in the soil and weather conditions below to find the best crop to plant.")
 
 @st.cache_resource
 def load_my_model():
@@ -13,17 +17,27 @@ def load_my_model():
 
 model = load_my_model()
 
-st.write("Enter the soil and weather details to get the best crop.")
+st.divider()
 
-n = st.number_input("Nitrogen (N)", value=90)
-p = st.number_input("Phosphorus (P)", value=42)
-k = st.number_input("Potassium (K)", value=43)
-temp = st.number_input("Temperature", value=20.8)
-hum = st.number_input("Humidity", value=82.0)
-ph = st.number_input("pH Level", value=6.5)
-rain = st.number_input("Rainfall", value=202.9)
+# Organize inputs into two columns so it looks neater
+col1, col2 = st.columns(2)
 
-if st.button("Predict"):
+with col1:
+    st.subheader("Soil Nutrients")
+    n = st.number_input("Nitrogen (N)", value=90)
+    p = st.number_input("Phosphorus (P)", value=42)
+    k = st.number_input("Potassium (K)", value=43)
+    ph = st.number_input("pH Level", value=6.5)
+
+with col2:
+    st.subheader("Weather Conditions")
+    temp = st.number_input("Temperature (°C)", value=20.8)
+    hum = st.number_input("Humidity (%)", value=82.0)
+    rain = st.number_input("Rainfall (mm)", value=202.9)
+
+st.write("") # empty space
+
+if st.button("Predict Best Crop", type="primary", use_container_width=True):
     data = {
         'N': n,
         'P': p,
@@ -37,5 +51,6 @@ if st.button("Predict"):
     crop = model.predict(data)
     profit = model.get_profit(crop)
     
-    st.success("Recommended Crop: " + crop.upper())
-    st.info("Estimated Profit: ₹" + str(profit) + " per acre")
+    st.markdown("### Results:")
+    st.success("✅ **Recommended Crop:** " + crop.capitalize())
+    st.info("💰 **Estimated Profit:** ₹" + str(profit) + " per acre")
