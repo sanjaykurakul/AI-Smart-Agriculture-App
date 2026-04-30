@@ -76,3 +76,24 @@ class CropModel:
 
     def get_profit(self, crop):
         return self.profit_data.get(crop, 0)
+
+def chatbot_response(self, user_query):
+    query = user_query.lower()
+
+    if "best crop" in query:
+        return "You can use the predictor above to find the best crop based on your soil and weather conditions."
+
+    elif "rice" in query:
+        return "Rice grows well in high rainfall and humid conditions."
+
+    elif "temperature" in query:
+        return "Most crops prefer temperatures between 20°C to 30°C."
+
+    elif "profit" in query:
+        return "Crops like mango, grapes, and apple generally give high profits."
+
+    elif "fertilizer" in query:
+        return "Balanced NPK fertilizers help improve soil quality."
+
+    else:
+        return "Please provide more details about your soil or weather conditions."
