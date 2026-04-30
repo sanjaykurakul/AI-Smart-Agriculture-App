@@ -1,0 +1,17 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Dataset (if you add a real CSV later, you might want to ignore it if it's too large, but for now we won't ignore CSVs unless specified)
+# *.csv
+
+# macOS system files
+.DS_Store
