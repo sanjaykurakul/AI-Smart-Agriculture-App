@@ -1,24 +1,24 @@
 import streamlit as st
 import pandas as pd
 from crop_recommendation import CropModel
-# simple page config
+
 st.set_page_config(page_title="Crop Predictor", layout="centered")
 
 st.title("🌾 Crop Recommendation System")
-st.write("Fill in the soil and weather conditions below to find the best crop to plant.")
+st.write("Fill in the soil and weather conditions below to find the best crop.")
 
 @st.cache_resource
-def load_my_model():
+def load_model():
     m = CropModel()
     X_train, X_test, y_train, y_test = m.load_data()
     m.train(X_train, y_train)
     return m
 
-model = load_my_model()
+model = load_model()
 
 st.divider()
 
-# Organize inputs into two columns so it looks neater
+# INPUTS
 col1, col2 = st.columns(2)
 
 with col1:
@@ -34,9 +34,11 @@ with col2:
     hum = st.number_input("Humidity (%)", value=82.0)
     rain = st.number_input("Rainfall (mm)", value=202.9)
 
-st.write("") # empty space
+st.write("")
 
-if st.button("Predict Best Crop", type="primary", use_container_width=True):
+# 🔥 PREDICT BUTTON (FIXED)
+if st.button("🚀 Predict Best Crop", use_container_width=True):
+
     data = {
         'N': n,
         'P': p,
@@ -46,11 +48,26 @@ if st.button("Predict Best Crop", type="primary", use_container_width=True):
         'ph': ph,
         'rainfall': rain
     }
-    
+
     crop, confidence = model.predict_with_confidence(data)
     profit = model.get_profit(crop)
+    explanation = model.explain_prediction(data)
 
-    st.divider()
+    st.markdown("## 🌾 Prediction Results")
+
+    st.success(f"✅ Recommended Crop: {crop.upper()}")
+    st.info(f"💰 Estimated Profit: ₹{profit} per acre")
+    st.warning(f"📊 Confidence: {confidence}%")
+
+    st.markdown("### 🤖 AI Explanation")
+    st.write(explanation)
+
+    st.markdown("### 📊 Feature Importance")
+    st.bar_chart(model.model.feature_importances_)
+
+# ---------------- CHATBOT ----------------
+
+st.divider()
 st.markdown("## 🤖 Farmer Assistant Chatbot")
 
 if "chat_history" not in st.session_state:
@@ -61,16 +78,12 @@ user_input = st.text_input("Ask your question:")
 if st.button("Send"):
     if user_input:
         response = model.chatbot_response(user_input)
-
         st.session_state.chat_history.append(("You", user_input))
         st.session_state.chat_history.append(("Bot", response))
 
+# DISPLAY CHAT
 for role, msg in st.session_state.chat_history:
     if role == "You":
         st.write(f"🧑‍🌾 {msg}")
     else:
         st.write(f"🤖 {msg}")
-    
-    st.markdown("### Results:")
-    st.success("✅ **Recommended Crop:** " + crop.capitalize())
-    st.info("💰 **Estimated Profit:** ₹" + str(profit) + " per acre")
