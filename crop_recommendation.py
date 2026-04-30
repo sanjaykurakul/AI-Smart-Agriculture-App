@@ -5,10 +5,10 @@ from sklearn.ensemble import RandomForestClassifier
 
 class CropModel:
     def __init__(self):
-        # using random forest for classification
+        
         self.model = RandomForestClassifier(n_estimators=100, random_state=42)
         
-        # profit per acre in rupees (INR)
+       
         self.profit_data = {
             'rice': 64000,
             'maize': 52000,
@@ -35,7 +35,7 @@ class CropModel:
         }
 
     def get_dummy_data(self, n=2000):
-        # generate random data if csv is not there
+      
         np.random.seed(42)
         crops = list(self.profit_data.keys())
         
@@ -62,7 +62,7 @@ class CropModel:
         X = df[['N', 'P', 'K', 'temperature', 'humidity', 'ph', 'rainfall']]
         y = df['label']
         
-        # split 80% train 20% test
+       
         return train_test_split(X, y, test_size=0.2, random_state=42)
 
     def train(self, X_train, y_train):
