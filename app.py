@@ -47,7 +47,7 @@ if st.button("Predict Best Crop", type="primary", use_container_width=True):
         'rainfall': rain
     }
     
-    crop = model.predict(data)
+    crop, confidence = model.predict_with_confidence(data)
     profit = model.get_profit(crop)
 
     st.divider()
