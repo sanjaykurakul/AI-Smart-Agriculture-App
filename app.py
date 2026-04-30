@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
-from crop_recommendation import CropModel
+from crop_recommendation 
+import CropModel
 
 # simple page config
 st.set_page_config(page_title="Crop Predictor", layout="centered")
