@@ -50,6 +50,27 @@ if st.button("Predict Best Crop", type="primary", use_container_width=True):
     
     crop = model.predict(data)
     profit = model.get_profit(crop)
+
+    st.divider()
+st.markdown("## 🤖 Farmer Assistant Chatbot")
+
+if "chat_history" not in st.session_state:
+    st.session_state.chat_history = []
+
+user_input = st.text_input("Ask your question:")
+
+if st.button("Send"):
+    if user_input:
+        response = model.chatbot_response(user_input)
+
+        st.session_state.chat_history.append(("You", user_input))
+        st.session_state.chat_history.append(("Bot", response))
+
+for role, msg in st.session_state.chat_history:
+    if role == "You":
+        st.write(f"🧑‍🌾 {msg}")
+    else:
+        st.write(f"🤖 {msg}")
     
     st.markdown("### Results:")
     st.success("✅ **Recommended Crop:** " + crop.capitalize())
